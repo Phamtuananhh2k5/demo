@@ -3,69 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nginx Configuration</title>
+    <title>Beautiful Webpage</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+        /* Reset some basic styles */
+        body, h1, h2, h3, p, ul {
+            margin: 0;
+            padding: 0;
         }
-        pre {
-            background-color: #f4f4f4;
-            padding: 15px;
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #ff6f61;
             border-radius: 5px;
-            overflow-x: auto;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #ff4b47;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #fff;
         }
     </style>
 </head>
 <body>
-    <h1>Nginx Configuration</h1>
-    <pre><code>server {
-    listen 80;
-    server_name admin.xn--iiq451n.com;
-
-    # Block user agents cụ thể
-    set $block_user_agents 0;
-    if ($http_user_agent ~* "Edge|Firefox|Chrome|Safari|Opera|Brave") {
-        set $block_user_agents 1;
-    }
-
-    location / {
-        if ($block_user_agents) {
-            return 403;
-        }
-        
-        deny all;
-    }
-
-    location /api/v1/client/ {
-        if ($request_method !~ ^(GET)$) {
-            return 405;
-        }
-        
-        if ($block_user_agents) {
-            return 403;
-        }
-
-        proxy_pass http://206.189.42.29;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-
-    error_page 403 /403.html;
-    error_page 405 /405.html;
-
-    location = /403.html {
-        root /usr/share/nginx/html;
-        internal;
-    }
-
-    location = /405.html {
-        root /usr/share/nginx/html;
-        internal;
-    }
-}
-    </code></pre>
+    <div class="container">
+        <h1>Welcome to My Beautiful Webpage</h1>
+        <p>This is a simple example of a beautiful webpage using HTML and CSS.</p>
+        <a href="#" class="btn">Learn More</a>
+    </div>
+    <footer>
+        &copy; 2024 Your Name. All rights reserved.
+    </footer>
 </body>
 </html>
