@@ -1,51 +1,71 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang Web Đơn Giản</title>
+    <title>Nginx Configuration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
+            margin: 20px;
+        }
+        pre {
             background-color: #f4f4f4;
-            color: #333;
-        }
-        header {
-            background-color: #007bff;
-            color: white;
-            padding: 10px 0;
-            text-align: center;
-        }
-        main {
-            background-color: white;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #777;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Chào Mừng Đến với Trang Web Đơn Giản</h1>
-    </header>
+    <h1>Nginx Configuration</h1>
+    <pre><code>server {
+    listen 80;
+    server_name admin.xn--iiq451n.com;
 
-    <main>
-        <p>Đây là một trang web HTML cơ bản. Bạn có thể thêm nhiều nội dung khác tại đây.</p>
-        <p>Hãy thử chỉnh sửa và khám phá thêm các tính năng của HTML!</p>
-        <a href="https://www.google.com" target="_blank">Truy cập Google</a>
-    </main>
+    # Block user agents cụ thể
+    set $block_user_agents 0;
+    if ($http_user_agent ~* "Edge|Firefox|Chrome|Safari|Opera|Brave") {
+        set $block_user_agents 1;
+    }
 
-    <footer>
-        <p>&copy; 2024 Trang Web Đơn Giản. All rights reserved.</p>
-    </footer>
+    location / {
+        if ($block_user_agents) {
+            return 403;
+        }
+        
+        deny all;
+    }
+
+    location /api/v1/client/ {
+        if ($request_method !~ ^(GET)$) {
+            return 405;
+        }
+        
+        if ($block_user_agents) {
+            return 403;
+        }
+
+        proxy_pass http://206.189.42.29;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    error_page 403 /403.html;
+    error_page 405 /405.html;
+
+    location = /403.html {
+        root /usr/share/nginx/html;
+        internal;
+    }
+
+    location = /405.html {
+        root /usr/share/nginx/html;
+        internal;
+    }
+}
+    </code></pre>
 </body>
 </html>
